@@ -8,13 +8,17 @@ const errorHandler = require('./middleware/errorHandler');
 // Route Imports
 const healthRoutes = require('./routes/healthRoutes');
 const authRoutes = require('./routes/authRoutes');
+const propertyRoutes = require('./routes/propertyRoutes');
+const roomRoutes = require('./routes/roomRoutes');
+const amenityRoutes = require('./routes/amenityRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
 
 // Standard Middleware
 app.use(cors({
   origin: config.clientUrl || '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 }));
@@ -31,14 +35,24 @@ app.get('/', (req, res) => {
     name: 'RoomVerse API Gateway',
     version: '1.0.0',
     description: 'Smart Rental, PG & Accommodation Platform for Students & Professionals',
-    health: '/api/health',
-    auth: '/api/auth',
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth',
+      properties: '/api/properties',
+      rooms: '/api/rooms',
+      amenities: '/api/amenities',
+      admin: '/api/admin',
+    },
   });
 });
 
 // Mount Routes
 app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/properties', propertyRoutes);
+app.use('/api/rooms', roomRoutes);
+app.use('/api/amenities', amenityRoutes);
+app.use('/api/admin', adminRoutes);
 
 // 404 Handler for Unmatched API Routes
 app.use(notFoundHandler);

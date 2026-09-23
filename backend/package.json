@@ -8,7 +8,8 @@
     "dev": "node --watch src/server.js",
     "db:init": "node src/scripts/initDb.js",
     "db:test": "node src/scripts/testConnection.js",
-    "test:auth": "node src/scripts/testAuth.js"
+    "test:auth": "node src/scripts/testAuth.js",
+    "test:properties": "node src/scripts/testProperties.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

@@ -19,6 +19,12 @@ import Dashboard from './pages/Dashboard';
 import OwnerDashboard from './pages/OwnerDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 
+// Phase 6 Property Management Pages
+import ManageProperties from './pages/owner/ManageProperties';
+import AddProperty from './pages/owner/AddProperty';
+import EditProperty from './pages/owner/EditProperty';
+import AdminProperties from './pages/admin/AdminProperties';
+
 export default function App() {
   return (
     <AuthProvider>
@@ -53,10 +59,42 @@ export default function App() {
             }
           />
           <Route
+            path="owner/properties"
+            element={
+              <ProtectedRoute allowedRoles={['owner']}>
+                <ManageProperties />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="owner/properties/new"
+            element={
+              <ProtectedRoute allowedRoles={['owner']}>
+                <AddProperty />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="owner/properties/:id/edit"
+            element={
+              <ProtectedRoute allowedRoles={['owner', 'admin']}>
+                <EditProperty />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="admin"
             element={
               <ProtectedRoute allowedRoles={['admin']}>
                 <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/properties"
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminProperties />
               </ProtectedRoute>
             }
           />

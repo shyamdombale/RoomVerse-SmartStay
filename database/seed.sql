@@ -14,14 +14,14 @@ SET FOREIGN_KEY_CHECKS = 0;
 DELETE FROM `users`;
 INSERT INTO `users` (`id`, `name`, `email`, `password_hash`, `phone`, `role`, `is_active`) VALUES
 -- Admin
-('user-admin-1', 'Suresh Menon', 'admin@roomverse.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '+91 9820011223', 'admin', TRUE),
+('user-admin-1', 'Suresh Menon', 'admin@roomverse.com', '$2b$10$fUHG9NQ8GSR0HxMOQcEt..071aZ2/DQJC.7ROyWrXIcbnvakW.vpi', '+91 9820011223', 'admin', TRUE),
 -- Property Owners
-('user-owner-1', 'Vikram Sharma', 'vikram.sharma@gmail.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '+91 9811223344', 'owner', TRUE),
-('user-owner-2', 'Priya Deshmukh', 'priya.deshmukh@gmail.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '+91 9822334455', 'owner', TRUE),
+('user-owner-1', 'Vikram Sharma', 'vikram.sharma@gmail.com', '$2b$10$fUHG9NQ8GSR0HxMOQcEt..071aZ2/DQJC.7ROyWrXIcbnvakW.vpi', '+91 9811223344', 'owner', TRUE),
+('user-owner-2', 'Priya Deshmukh', 'priya.deshmukh@gmail.com', '$2b$10$fUHG9NQ8GSR0HxMOQcEt..071aZ2/DQJC.7ROyWrXIcbnvakW.vpi', '+91 9822334455', 'owner', TRUE),
 -- Tenants / Students
-('user-tenant-1', 'Rohit Verma', 'rohit.verma@gmail.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '+91 9988776655', 'customer', TRUE),
-('user-tenant-2', 'Ananya Sen', 'ananya.sen@gmail.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '+91 9977665544', 'customer', TRUE),
-('user-tenant-3', 'Rahul Nair', 'rahul.nair@gmail.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '+91 9966554433', 'customer', TRUE);
+('user-tenant-1', 'Rohit Verma', 'rohit.verma@gmail.com', '$2b$10$fUHG9NQ8GSR0HxMOQcEt..071aZ2/DQJC.7ROyWrXIcbnvakW.vpi', '+91 9988776655', 'customer', TRUE),
+('user-tenant-2', 'Ananya Sen', 'ananya.sen@gmail.com', '$2b$10$fUHG9NQ8GSR0HxMOQcEt..071aZ2/DQJC.7ROyWrXIcbnvakW.vpi', '+91 9977665544', 'customer', TRUE),
+('user-tenant-3', 'Rahul Nair', 'rahul.nair@gmail.com', '$2b$10$fUHG9NQ8GSR0HxMOQcEt..071aZ2/DQJC.7ROyWrXIcbnvakW.vpi', '+91 9966554433', 'customer', TRUE);
 
 -- ------------------------------------------------------------------------------
 -- 2. SEED PROFILES
