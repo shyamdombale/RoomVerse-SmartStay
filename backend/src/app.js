@@ -7,6 +7,7 @@ const errorHandler = require('./middleware/errorHandler');
 
 // Route Imports
 const healthRoutes = require('./routes/healthRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 
@@ -31,11 +32,13 @@ app.get('/', (req, res) => {
     version: '1.0.0',
     description: 'Smart Rental, PG & Accommodation Platform for Students & Professionals',
     health: '/api/health',
+    auth: '/api/auth',
   });
 });
 
 // Mount Routes
 app.use('/api/health', healthRoutes);
+app.use('/api/auth', authRoutes);
 
 // 404 Handler for Unmatched API Routes
 app.use(notFoundHandler);
