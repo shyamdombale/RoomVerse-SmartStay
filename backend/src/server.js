@@ -1,15 +1,24 @@
 const app = require('./app');
 const config = require('./config/env');
+const { checkDatabaseConnection } = require('./config/db');
 
 const PORT = config.port;
 
-// Start Server
-const server = app.listen(PORT, () => {
+// Start Server and verify DB connection
+const server = app.listen(PORT, async () => {
   console.log('==================================================');
   console.log(`🚀 RoomVerse Backend API Server running on port ${PORT}`);
   console.log(`🌐 Base URL: http://localhost:${PORT}`);
   console.log(`🩺 Health Endpoint: http://localhost:${PORT}/api/health`);
   console.log(`⚙️  Environment: ${config.nodeEnv}`);
+
+  // Test MySQL Connection on Startup
+  const dbCheck = await checkDatabaseConnection();
+  if (dbCheck.connected) {
+    console.log(`🗄️  Database: MySQL 8.0 Connected (${dbCheck.details.database} on ${dbCheck.details.host}:${dbCheck.details.port})`);
+  } else {
+    console.warn(`⚠️  Database Warning: ${dbCheck.message}`);
+  }
   console.log('==================================================');
 });
 
@@ -21,7 +30,6 @@ const handleGracefulShutdown = (signal) => {
     process.exit(0);
   });
 
-  // Force close after timeout if hanging
   setTimeout(() => {
     console.error('Forcefully terminating process after timeout.');
     process.exit(1);
