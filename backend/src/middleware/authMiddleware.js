@@ -95,7 +95,23 @@ function requireRole(...allowedRoles) {
   };
 }
 
+/**
+ * Optional JWT Authentication Middleware
+ * If Authorization header is present, verifies token and attaches req.user.
+ * If Authorization header is absent, sets req.user = null and proceeds.
+ * If token is malformed or invalid, returns 401 error.
+ */
+function optionalAuthenticateJWT(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    req.user = null;
+    return next();
+  }
+  return authenticateJWT(req, res, next);
+}
+
 module.exports = {
   authenticateJWT,
+  optionalAuthenticateJWT,
   requireRole,
 };

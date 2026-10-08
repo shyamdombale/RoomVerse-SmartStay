@@ -7,6 +7,27 @@ const propertyService = {
     return res.data || [];
   },
 
+  async searchProperties(params = {}) {
+    const res = await api.get('/properties', { params });
+    return {
+      properties: res.data || [],
+      meta: res.meta || {
+        total: (res.data || []).length,
+        count: (res.data || []).length,
+        page: 1,
+        limit: 12,
+        totalPages: 1,
+        hasNextPage: false,
+        hasPrevPage: false,
+      },
+    };
+  },
+
+  async getFilterMeta() {
+    const res = await api.get('/properties/filters/meta');
+    return res.data || null;
+  },
+
   async getPropertyById(id) {
     const res = await api.get(`/properties/${id}`);
     return res.data || null;

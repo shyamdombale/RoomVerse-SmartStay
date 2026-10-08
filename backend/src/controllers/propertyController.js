@@ -75,7 +75,7 @@ async function createProperty(req, res, next) {
 
 /**
  * GET /api/properties
- * Authenticated users: view list of properties
+ * Public & Authenticated users: view list of properties with search, filters, and pagination
  * Supports ?my=true for owners to view only their own listings
  */
 async function getProperties(req, res, next) {
@@ -84,20 +84,76 @@ async function getProperties(req, res, next) {
     let filterOwnerId = null;
 
     if (isOwnerQuery) {
-      // Owners can only view their own when ?my=true
+      if (!req.user || !req.user.id) {
+        return apiResponse.error(res, 'Authentication token required to view your own properties', 401, [
+          { field: 'authorization', message: 'You must be signed in to view your owner portfolio' },
+        ]);
+      }
       filterOwnerId = req.user.id;
     }
 
-    const properties = await Property.findAll({
+    const {
+      search, q, city, locality, propertyType, type,
+      genderPreference, gender, minRent, minPrice,
+      maxRent, maxPrice, minTotalCost, maxTotalCost,
+      foodAvailable, roomType, isAc, ac, isFurnished, furnished,
+      availableOnly, hasVacancy, amenities, minRating,
+      status, active, sortBy, sort, page, limit
+    } = req.query;
+
+    const result = await Property.findAll({
       ownerId: filterOwnerId,
-      city: req.query.city || null,
-      verificationStatus: req.query.status || null,
-      isActive: req.query.active !== undefined ? req.query.active === 'true' : null,
+      search: search || q || null,
+      city: city || null,
+      locality: locality || null,
+      propertyType: propertyType || type || null,
+      genderPreference: genderPreference || gender || null,
+      minRent: minRent || minPrice || null,
+      maxRent: maxRent || maxPrice || null,
+      minTotalCost: minTotalCost || null,
+      maxTotalCost: maxTotalCost || null,
+      foodAvailable: foodAvailable !== undefined ? foodAvailable : null,
+      roomType: roomType || null,
+      isAc: isAc !== undefined ? isAc : (ac !== undefined ? ac : null),
+      isFurnished: isFurnished !== undefined ? isFurnished : (furnished !== undefined ? furnished : null),
+      availableOnly: availableOnly !== undefined ? availableOnly : (hasVacancy !== undefined ? hasVacancy : null),
+      amenities: amenities || null,
+      minRating: minRating || null,
+      verificationStatus: status || null,
+      isActive: active !== undefined ? active === 'true' : null,
+      sortBy: sortBy || sort || 'newest',
+      page: page ? parseInt(page, 10) : null,
+      limit: limit ? parseInt(limit, 10) : null,
     });
 
-    return apiResponse.success(res, properties, 'Properties retrieved successfully', 200, {
-      count: properties.length,
-    });
+    return apiResponse.success(
+      res,
+      result.properties,
+      'Properties retrieved successfully',
+      200,
+      {
+        total: result.total,
+        count: result.properties.length,
+        page: result.page,
+        limit: result.limit,
+        totalPages: result.totalPages,
+        hasNextPage: result.hasNextPage,
+        hasPrevPage: result.hasPrevPage,
+      }
+    );
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * GET /api/properties/filters/meta
+ * Public: get dynamic filter choices, price boundaries, and amenities catalog
+ */
+async function getFilterMetadata(req, res, next) {
+  try {
+    const meta = await Property.getFilterMeta();
+    return apiResponse.success(res, meta, 'Filter metadata retrieved successfully', 200);
   } catch (err) {
     next(err);
   }
@@ -188,6 +244,7 @@ async function deleteProperty(req, res, next) {
 module.exports = {
   createProperty,
   getProperties,
+  getFilterMetadata,
   getPropertyById,
   updateProperty,
   deleteProperty,

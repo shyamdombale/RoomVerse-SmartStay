@@ -4,12 +4,15 @@ const propertyController = require('../controllers/propertyController');
 const roomController = require('../controllers/roomController');
 const amenityController = require('../controllers/amenityController');
 const imageController = require('../controllers/imageController');
-const { authenticateJWT, requireRole } = require('../middleware/authMiddleware');
+const { authenticateJWT, optionalAuthenticateJWT, requireRole } = require('../middleware/authMiddleware');
+
+// Property Filter Metadata (Must be declared before /:id)
+router.get('/filters/meta', propertyController.getFilterMetadata);
 
 // Property Core CRUD
 router.post('/', authenticateJWT, requireRole('owner'), propertyController.createProperty);
-router.get('/', authenticateJWT, propertyController.getProperties);
-router.get('/:id', authenticateJWT, propertyController.getPropertyById);
+router.get('/', optionalAuthenticateJWT, propertyController.getProperties);
+router.get('/:id', optionalAuthenticateJWT, propertyController.getPropertyById);
 router.put('/:id', authenticateJWT, requireRole('owner', 'admin'), propertyController.updateProperty);
 router.delete('/:id', authenticateJWT, requireRole('owner', 'admin'), propertyController.deleteProperty);
 
